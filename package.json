@@ -1,0 +1,29 @@
+{
+  "name": "no-chat",
+  "version": "1.0.0",
+  "description": "A simple Node.js chat application using Socket.io and Express",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon -L app"
+  },
+  "dependencies": {
+    "express": "^4.17.2",
+    "dotenv": "^14.2.0",
+    "socket.io": "^4.4.1",
+    "helmet": "^5.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "keywords": [
+    "chat application",
+    "node.js",
+    "express.js",
+    "socket.io",
+    "javascript",
+    "networking"
+  ],
+  "author": "cedricouellet",
+  "license": "ISC"
+}
