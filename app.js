@@ -1,47 +1,79 @@
-const path = require('path');
-const helmet = require('helmet');
-const http = require('http');
-const socketIoServer = require('socket.io');
-const express = require('express');
+const path = require("path");
+const helmet = require("helmet");
+const http = require("http");
+const socketIoServer = require("socket.io");
+const express = require("express");
+
+const sanitizer = require("./helpers/sanitizer");
+const messaging = require("./helpers/messaging");
+const users = require("./helpers/users");
 
 const PORT = parseInt(process.env.PORT) || 3000;
 
-const EV_CONNECT = 'connection';
-const EV_MESSAGE = 'message';
-const EV_CHAT_MESSAGE = 'chat_message';
-const EV_DISCONNECT = 'disconnect';
+// Builtin Socket.IO
+const EV_CONNECT = "connection";
+const EV_DISCONNECT = "disconnect";
+
+// Custom events
+const EV_JOIN = "join";
+const EV_MESSAGE = "message";
+const EV_CHAT_MESSAGE = "chat_message";
+const EV_USERS = "users";
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIoServer(server);
 
-// Express middlewares
 app.use(helmet());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
-// Listen for socket connections
 io.on(EV_CONNECT, (socket) => {
   console.log(`client socket ${socket.id} connected`);
 
-  // Welcome the new user
-  socket.emit(EV_MESSAGE, 'Welcome to NoChat!');
+  socket.on(EV_JOIN, (username) => {
+    const joined = users.add(socket.id, username);
 
-  // Send to all users except the new user
-  socket.broadcast.emit(EV_MESSAGE, 'A user has joined the chat.');
+    socket.emit(
+      EV_MESSAGE,
+      messaging.generateServerMessage("Welcome to NoChat :-)")
+    );
 
-  // When a user disconnects
-  socket.on(EV_DISCONNECT, () => {
-    io.emit(EV_MESSAGE, 'A user has left the chat.');
+    socket.emit(EV_JOIN, joined.username);
+
+    socket.broadcast.emit(
+      EV_MESSAGE,
+      messaging.generateServerMessage(`${joined.username} has joined the chat.`)
+    );
+
+    io.emit(EV_USERS, users.getUsernames());
   });
 
-  // When a user sends a message
+  socket.on(EV_DISCONNECT, () => {
+    const left = users.getById(socket.id);
+
+    if (left) {
+      users.remove(left.id);
+
+      io.emit(
+        EV_MESSAGE,
+        messaging.generateServerMessage(`${left.username} has left the chat.`)
+      );
+    }
+
+    io.emit(EV_USERS, users.getUsernames());
+  });
+
   socket.on(EV_CHAT_MESSAGE, (message) => {
-    // We broadcast it to every user
-    io.emit(EV_MESSAGE, message);
+    const messageObject = {
+      sender: users.getById(socket.id).username,
+      text: sanitizer.sanitize(message, "*", 2),
+      time: messaging.generateFormattedDate(),
+    };
+
+    io.emit(EV_MESSAGE, messageObject);
   });
 });
 
-// Start Express server
 server.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });

@@ -65,8 +65,15 @@
 #messages .message {
   padding: 10px;
   margin-bottom: 15px;
-  background-color: var(--accent-color);
   border-radius: 5px;
+}
+
+.outgoing-message {
+  background-color: gray;
+}
+
+.incoming-message {
+  background-color: var(--accent-color);
 }
 
 .message,
