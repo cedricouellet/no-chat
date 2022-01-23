@@ -1,3 +1,6 @@
+const { BOT_NAME } = require("./constants");
+const sanitizer = require('./sanitizer');
+
 let users = [];
 
 /**
@@ -7,13 +10,15 @@ let users = [];
  * @return {{id: string, username: string}} The user that was added.
  */
 function add(id, username) {
+  id = id.trim();
+  username = sanitizer.sanitize(username);
   let existing = users.find((user) => user.username === username);
 
-  if (existing !== undefined) {
-    let i = 0;
+  if (existing !== undefined || username === BOT_NAME) {
+    let i = 1;
     while (existing !== undefined) {
-      i++;
       existing = users.find((user) => user.username === `${username}(${i})`);
+      i++;
     }
     username = `${username}(${i})`;
   }
