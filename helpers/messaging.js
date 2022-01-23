@@ -1,3 +1,5 @@
+const {BOT_NAME} = require('./constants');
+
 /**
  * Generate a message coming from the server.
  * @param {string} message The message to send.
@@ -5,7 +7,7 @@
  */
 function generateServerMessage(message) {
   return {
-    sender: "NoChat Server",
+    sender: BOT_NAME,
     text: message,
     time: generateFormattedDate(),
   };

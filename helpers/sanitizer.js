@@ -6,5 +6,5 @@ const profanityFilter = require("leo-profanity");
  * @return {string} The filtered string.
  */
 module.exports.sanitize = (str) => {
-  return profanityFilter.clean(str, "*", 2);
+  return profanityFilter.clean(str.trim(), "🤫", 2);
 };
