@@ -1,0 +1,53 @@
+#container {
+  max-width: 50%;
+  margin: auto;
+  color: #fff;
+}
+
+#header {
+  border-radius: 15px 15px 0 0;
+  text-align: center;
+  padding: 20px;
+  background: var(--primary-color);
+}
+
+#main {
+  border-radius: 0 0 15px 15px;
+  padding: 30px 40px;
+  background: var(--secondary-color);
+}
+
+#main p {
+  margin-bottom: 20px;
+}
+
+#main .form-control {
+  margin-bottom: 20px;
+}
+
+#main label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#main input[type="text"] {
+  font-size: 16px;
+  padding: 5px;
+  height: 40px;
+  width: 100%;
+}
+
+#main .btn {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.btn {
+  max-width: 20%;
+}
+
+@media (max-width: 700px) {
+  .btn {
+    max-width: 45%;
+  }
+}
