@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+        integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/chat.css">
+    <script src="/socket.io/socket.io.min.js" defer></script>
+    <script src="js/chat.js" defer></script>
+    <title>NoChat - Chat</title>
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+            <h1>NoChat&nbsp;<i class="fas fa-comment-dots"></i></h1>
+            <a href="index.html" class="btn">Leave</a>
+        </header>
+        <div id="main">
+            <div id="sidebar">
+                <h3>Users&nbsp<i class="fas fa-user-friends"></i></h3>
+                <ul id="users"></ul>
+            </div>
+            <div id="messages"></div>
+        </div>
+        <div id="form-container">
+            <form id="form">
+                <input id="message-input" type="text" placeholder="Enter your message..." autocomplete="off" required />
+                <button id="send-btn" class="btn">Send&nbsp;<i class="fas fa-share"></i></button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
