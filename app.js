@@ -1,7 +1,8 @@
 const path = require("path");
 const helmet = require("helmet");
 const http = require("http");
-const socketIoServer = require("socket.io");
+const cors = require("cors");
+const socketIO = require("socket.io");
 const express = require("express");
 
 const { events } = require("./helpers/constants");
@@ -13,9 +14,10 @@ const PORT = parseInt(process.env.PORT) || 3000;
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIoServer(server);
+const io = socketIO(server);
 
 app.use(helmet());
+app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
 try {
