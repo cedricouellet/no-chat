@@ -12,8 +12,7 @@
     "dotenv": "^14.2.0",
     "socket.io": "^4.4.1",
     "helmet": "^5.0.2",
-    "leo-profanity": "^1.5.0",
-    "cors": "^2.8.5"
+    "leo-profanity": "^1.5.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

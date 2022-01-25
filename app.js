@@ -1,7 +1,6 @@
 const path = require("path");
 const helmet = require("helmet");
 const http = require("http");
-const cors = require("cors");
 const socketIO = require("socket.io");
 const express = require("express");
 
@@ -17,7 +16,6 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 app.use(helmet());
-app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
 try {
