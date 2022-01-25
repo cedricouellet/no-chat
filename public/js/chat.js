@@ -1,3 +1,5 @@
+const MAX_MESSAGE_LENGTH = 500;
+
 // socket.io server event IDs
 const EV_MESSAGE = "message";
 const EV_CHAT_MESSAGE = "chat_message";
@@ -36,9 +38,13 @@ socket.on(EV_USERS, (usernameList) => {
 chatForm.addEventListener(EV_SUBMIT, (e) => {
   e.preventDefault();
 
-  const msg = messageInput.value.trim();
+  let msg = messageInput.value.trim();
 
   if (msg === "") return;
+
+  if (msg.length > MAX_MESSAGE_LENGTH) {
+    msg = msg.substring(0, MAX_MESSAGE_LENGTH) + "...";
+  }
 
   socket.emit(EV_CHAT_MESSAGE, msg);
 
