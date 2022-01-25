@@ -18,10 +18,59 @@ const io = socketIoServer(server);
 app.use(helmet());
 app.use(express.static(path.join(__dirname, "public")));
 
-io.on(events.CONNECT, (socket) => {
-  console.log(`client socket ${socket.id} connected`);
+try {
+  io.on(events.CONNECT, onClientSocketConnected);
+} catch (err) {
+  console.log(`A socket error occured: ${err}`);
+}
 
-  socket.on(events.JOIN, (username) => {
+server.listen(PORT, () => {
+  console.log(`listening on port ${PORT}`);
+});
+
+function disconnectClient(socket) {
+  try {
+    const left = users.getById(socket.id);
+
+    if (left) {
+      users.remove(left.id);
+
+      io.emit(
+        events.MESSAGE,
+        messaging.generateServerMessage(`${left.username} has left the chat.`)
+      );
+    }
+
+    io.emit(events.USERS, users.getUsernames());
+  } catch (err) {
+    console.log(`An error occured while disconnecting a user: ${err}`);
+  }
+}
+
+function receiveChatMessage(socket, message) {
+  try {
+    const messageObject = {
+      sender: users.getById(socket.id).username,
+      text: sanitizer.sanitize(message || "hi"),
+      time: messaging.generateFormattedDate(),
+    };
+
+    io.emit(events.MESSAGE, messageObject);
+  } catch (err) {
+    socket.emit(
+      events.MESSAGE,
+      messaging.generateServerMessage(
+        "Sending failed. Your message was too long or contained invalid characters."
+      )
+    );
+    console.log(
+      `An error occured while reading from client ${socket.id}: ${err}`
+    );
+  }
+}
+
+function joinUser(socket, username) {
+  try {
     const joined = users.add(socket.id, username);
 
     socket.emit(events.JOIN, joined.username);
@@ -37,34 +86,26 @@ io.on(events.CONNECT, (socket) => {
     );
 
     io.emit(events.USERS, users.getUsernames());
+  } catch (err) {
+    console.log(`An error occured while joining a user: ${err}`);
+  }
+}
+
+function onClientSocketConnected(socket) {
+  console.log(`client socket ${socket.id} connected`);
+
+  socket.on(events.JOIN, (username) => {
+    joinUser(socket, username);
+    console.log(`client socket ${socket.id} joined chat as '${username}'`);
   });
 
   socket.on(events.DISCONNECT, () => {
-    const left = users.getById(socket.id);
-
-    if (left) {
-      users.remove(left.id);
-
-      io.emit(
-        events.MESSAGE,
-        messaging.generateServerMessage(`${left.username} has left the chat.`)
-      );
-    }
-
-    io.emit(events.USERS, users.getUsernames());
+    disconnectClient(socket);
+    console.log(`client socket ${socket.id} disconnected`);
   });
 
   socket.on(events.CHAT_MESSAGE, (message) => {
-    const messageObject = {
-      sender: users.getById(socket.id).username,
-      text: sanitizer.sanitize(message, "*", 2),
-      time: messaging.generateFormattedDate(),
-    };
-
-    io.emit(events.MESSAGE, messageObject);
+    receiveChatMessage(socket, message);
+    console.log(`client socket ${socket.id} sent '${message}'`);
   });
-});
-
-server.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`);
-});
+}

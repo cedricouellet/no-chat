@@ -75,6 +75,9 @@
 .incoming-message {
   background-color: var(--accent-color);
 }
+.message {
+  word-wrap: break-word;
+}
 
 .message,
 .meta {
