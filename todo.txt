@@ -1,0 +1,3 @@
+Add notification when people join, leave and send messages: https://levelup.gitconnected.com/creating-browser-notification-in-javascript-79e91bfb76c8
+
+Notify a user they they cannot send a message if their socket disconnected. (See app.js in develop)
