@@ -49,6 +49,8 @@ function disconnectClient(socket) {
 
 function receiveChatMessage(socket, message) {
   try {
+    
+    // TODO if user is undefined (connection interrupted), return "You are no longer connected".
     const messageObject = {
       sender: users.getById(socket.id).username,
       text: sanitizer.sanitize(message || "hi"),
