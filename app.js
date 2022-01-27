@@ -49,10 +49,19 @@ function disconnectClient(socket) {
 
 function receiveChatMessage(socket, message) {
   try {
+    const sender = users.getById(socket.id)?.username;
+
+    if (sender === undefined) {
+      socket.emit(events.MESSAGE,
+        messaging.generateServerMessage("Your connection was lost...\n\nTry refreshing the page!")
+      );
+
+      return;
+    }
+
     const messageObject = {
-      sender: users.getById(socket.id).username,
+      sender: sender,
       text: sanitizer.sanitize(message || "hi"),
-      time: messaging.generateFormattedDate(),
     };
 
     io.emit(events.MESSAGE, messageObject);

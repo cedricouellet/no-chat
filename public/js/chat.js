@@ -1,4 +1,8 @@
+// Constants
 const MAX_MESSAGE_LENGTH = 500;
+const NOTIFICATION_FAVICON = './icon/notification.ico';
+const KEY_NOTIFICATIONS = "notifications";
+const KEY_USERNAME = "username";
 
 // socket.io server event IDs
 const EV_MESSAGE = "message";
@@ -8,52 +12,91 @@ const EV_USERS = "users";
 
 // DOM event IDs
 const EV_SUBMIT = "submit";
-const EV_CLICK = "click";
+const EV_MOUSEOVER = "mouseover";
+const EV_CHANGE = "change";
 
+// DOM elements
+const faviconHolder = document.getElementById("favicon");
 const messagesContainer = document.getElementById("messages");
 const messageInput = document.getElementById("message-input");
 const chatForm = document.getElementById("form");
 const usersContainer = document.getElementById("users");
+const notifyCheckbox = document.getElementById("notification-checkbox");
 
-let username = sessionStorage.getItem("username") || "Guest";
+// Session storage variables
+let username = sessionStorage.getItem(KEY_USERNAME) || "Guest";
+let notificationsEnabled = localStorage.getItem(KEY_NOTIFICATIONS) === 'true' || false;
+notifyCheckbox.checked = notificationsEnabled;
 
+// Notification senders
+const notifier = new BrowserNotifier(window);
+const notificationDisplayer = new NotificationDisplayer(faviconHolder, NOTIFICATION_FAVICON);
+
+// Client socket
 const socket = io();
 
+// Socket event listeners
 socket.emit(EV_JOIN, username);
+socket.on(EV_JOIN, onJoin);
+socket.on(EV_MESSAGE, onMessageReceived);
+socket.on(EV_USERS, onUsersReceived);
 
-socket.on(EV_JOIN, (givenUsername) => {
-  username = givenUsername;
-  sessionStorage.setItem("username", username);
-});
-
-socket.on(EV_MESSAGE, (messageObject) => {
-  displayMessage(messageObject);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-});
-
-socket.on(EV_USERS, (usernameList) => {
-  displayUsernames(usernameList);
-});
-
-chatForm.addEventListener(EV_SUBMIT, (e) => {
-  e.preventDefault();
-
-  let msg = messageInput.value.trim();
-
-  if (msg === "") return;
-
-  if (msg.length > MAX_MESSAGE_LENGTH) {
-    msg = msg.substring(0, MAX_MESSAGE_LENGTH) + "...";
-  }
-
-  socket.emit(EV_CHAT_MESSAGE, msg);
-
-  messageInput.value = "";
+// DOM event listeners
+chatForm.addEventListener(EV_SUBMIT, onSubmitClicked);
+window.addEventListener(EV_MOUSEOVER, () => notificationDisplayer.clearNotifications());
+notifyCheckbox.addEventListener(EV_CHANGE, (e) => {
+  notificationsEnabled = e.target.checked;
+  localStorage.setItem(KEY_NOTIFICATIONS, notificationsEnabled);
 });
 
 /**
+ * When the user joins
+ * @param {string} givenUsername The username received from the server socket.
+ */
+function onJoin(givenUsername) {
+  username = givenUsername;
+  sessionStorage.setItem(KEY_USERNAME, username);
+}
+
+/**
+ * When a message is received from the server socket
+ * @param {{sender: string, text: string}} messageObject The message object to display.
+ */
+function onMessageReceived(messageObject) {
+  if (messageObject?.sender !== username) {
+    notificationDisplayer.addNotification();
+
+    if (notificationsEnabled === true) {
+      notifier.notify(messageObject?.text);
+    }
+  }
+
+  displayMessage(messageObject);
+
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+/**
+ * When the submit button is clicked.
+ * @param {Event} e The button click event
+ */
+function onSubmitClicked(e) {
+  e.preventDefault();
+
+  let message = messageInput.value.trim();
+  if (message === "") return;
+
+  if (message.length > MAX_MESSAGE_LENGTH) {
+    message = message.substring(0, MAX_MESSAGE_LENGTH) + "...";
+  }
+
+  socket.emit(EV_CHAT_MESSAGE, message);
+  messageInput.value = "";
+}
+
+/**
  * Display an incoming message.
- * @param {{sender: string, text: string, time: string}} messageObject The message object to display.
+ * @param {{sender: string, text: string}} messageObject The message object to display.
  */
 function displayMessage(messageObject) {
   const container = document.createElement("div");
@@ -70,7 +113,7 @@ function displayMessage(messageObject) {
   senderParagraph.innerText = messageObject?.sender;
 
   const senderTimeSpan = document.createElement("span");
-  senderTimeSpan.innerText = messageObject?.time;
+  senderTimeSpan.innerText = getFormattedTime();
 
   senderParagraph.appendChild(senderTimeSpan);
 
@@ -84,7 +127,11 @@ function displayMessage(messageObject) {
   messagesContainer.appendChild(container);
 }
 
-function displayUsernames(usernamesList) {
+/**
+ * Displays usernames on the DOM
+ * @param {string[]} usernamesList The list of usernames to display.
+ */
+function onUsersReceived(usernamesList) {
   usersContainer.innerHTML = "";
 
   usernamesList.forEach((username) => {
@@ -92,4 +139,21 @@ function displayUsernames(usernamesList) {
     user.innerText = username;
     usersContainer.appendChild(user);
   });
+}
+
+/**
+ * Gets the current time and formats it to xx:xx PM / AM
+ * @return {string} The current formatted time.
+ */
+function getFormattedTime() { 
+  const now = new Date();
+
+  const suffix = now.getHours() >= 12 ? " PM" : " AM";
+
+  let hours = now.getHours() % 12;
+  if (hours === 0) hours = 12;
+
+  let minutes = now.getMinutes().toString().padStart(2, "0");
+
+  return `${hours}:${minutes} ${suffix}`;
 }

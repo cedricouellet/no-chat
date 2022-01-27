@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <link id="favicon" rel="shortcut icon" href="icon/favicon.ico" type="image/x-icon" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="css/common.css" />
     <link rel="stylesheet" href="css/chat.css" />
     <script src="/socket.io/socket.io.min.js" defer></script>
+    <script src="js/BrowserNotifier.js" defer></script>
+    <script src="js/NotificationDisplayer.js" defer></script>
     <script src="js/chat.js" defer></script>
     <title>NoChat - Chat</title>
   </head>
@@ -24,11 +26,23 @@
         <a href="index.html" class="btn">Leave</a>
       </header>
       <div id="main">
-        <div id="sidebar">
-          <h3>Users&nbsp<i class="fas fa-user-friends"></i></h3>
+        <div id="sidebar" class="scrollbars">
+          <h3><i class="fas fa-cog"></i>&nbsp;Settings</h3>
+          <div>
+            <ul>
+              <li>
+                <input id="notification-checkbox" type="checkbox"/>
+                <label for="notification-checkbox">Alerts</label>
+                <br>
+                <br>
+              </li>
+            </ul>
+          </div>
+
+          <h3><i class="fas fa-user-friends"></i>&nbsp;Users</h3>
           <ul id="users"></ul>
         </div>
-        <div id="messages"></div>
+        <div id="messages" class="scrollbars"></div>
       </div>
       <div id="form-container">
         <form id="form">
@@ -51,7 +65,7 @@
           https://github.com/cedricouellet/no-chat
         </a>
         <div class="copyright">
-          Copyright &copy; 2022 cedricao. All Rights Reserved
+          Copyright &copy; 2022 NoChat Devs
         </div>
       </div>
     </div>
