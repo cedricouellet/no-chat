@@ -67,7 +67,7 @@ function onMessageReceived(messageObject) {
     notificationDisplayer.addNotification();
 
     if (notificationsEnabled === true) {
-      notifier.notify(messageObject?.text);
+      notifier.notify(`${messageObject?.sender} :${messageObject?.text}`);
     }
   }
 
