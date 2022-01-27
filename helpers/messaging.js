@@ -12,6 +12,26 @@ function generateServerMessage(message) {
   };
 }
 
+/**
+ * Detects if a string contains Zalgo text.
+ * @param {string} str The string to test.
+ * @return {boolean} If the string contains Zalgo or not.
+ */
+function getZalgoScore(str) {
+  if (str.length == 0) return false;
+
+  const reg = new RegExp(/([aeiouy]\u0308)|[\u0300-\u036f\u0489]/, "gi");
+  const trueLength = str.normalize("NFD").replace(/[\u0300-\u036f]/, "g").length;
+  let rawScore = 0;
+
+  str.split("").forEach(char => {
+    if (reg.test(char)) rawScore++;
+  });
+  
+  return rawScore / trueLength > 0.8;
+}
+
 module.exports = {
   generateServerMessage,
+  getZalgoScore,
 };
