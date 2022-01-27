@@ -8,6 +8,7 @@ const { events } = require("./helpers/constants");
 const sanitizer = require("./helpers/sanitizer");
 const messaging = require("./helpers/messaging");
 const users = require("./helpers/users");
+const constants = require("constants");
 
 const PORT = parseInt(process.env.PORT) || 3000;
 
@@ -50,9 +51,18 @@ function disconnectClient(socket) {
 function receiveChatMessage(socket, message) {
   try {
     
-    // TODO if user is undefined (connection interrupted), return "You are no longer connected".
+    const sender = users.getById(socket.id)?.username;
+
+    if (sender === undefined) {
+      socket.emit(events.MESSAGE,
+        messaging.generateServerMessage("Your connection was lost...\n\nTry refreshing the page!")
+      );
+
+      return;
+    }
+
     const messageObject = {
-      sender: users.getById(socket.id).username,
+      sender: sender,
       text: sanitizer.sanitize(message || "hi"),
     };
 
