@@ -53,7 +53,7 @@ chatForm.addEventListener(EV_SUBMIT, (e) => {
 
 /**
  * Display an incoming message.
- * @param {{sender: string, text: string, time: string}} messageObject The message object to display.
+ * @param {{sender: string, text: string}} messageObject The message object to display.
  */
 function displayMessage(messageObject) {
   const container = document.createElement("div");
@@ -70,7 +70,7 @@ function displayMessage(messageObject) {
   senderParagraph.innerText = messageObject?.sender;
 
   const senderTimeSpan = document.createElement("span");
-  senderTimeSpan.innerText = messageObject?.time;
+  senderTimeSpan.innerText = getFormattedTime();
 
   senderParagraph.appendChild(senderTimeSpan);
 
@@ -92,4 +92,24 @@ function displayUsernames(usernamesList) {
     user.innerText = username;
     usersContainer.appendChild(user);
   });
+}
+
+/**
+ * Gets the current time and formats it to x:xx PM / AM
+ * @return {string} The current formatted time.
+ */
+function getFormattedTime() { 
+  const now = new Date();
+
+  const suffix = now.getHours() >= 12 ? " PM" : " AM";
+
+  let hours = now.getHours() % 12;
+  if (hours == 0) hours = 12;
+
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  if (minutes < 10) {
+    minutes = "0" + minutes.toString();
+  }
+
+  return `${hours}:${minutes} ${suffix}`;
 }
