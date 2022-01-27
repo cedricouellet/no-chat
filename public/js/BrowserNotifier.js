@@ -36,14 +36,29 @@ class BrowserNotifier {
     this._sendNotification(message);
   }
 
+  /**
+   * Send a notification to the user.
+   * @param {string} message The notification message
+   * @private
+   */
   _sendNotification(message) {
     new Notification(message).close();
   }
 
+  /**
+   * If notifications are supported on this browser or not.
+   * @returns {boolean} True if notifications are supported on this browser, otherwise false.
+   * @private
+   */
   _isNotificationSupported() {
     return this._win.Notification !== undefined;
   }
 
+  /**
+   * If notification permissions are granted or not.
+   * @returns {boolean} True if notification permissions are granted, otherwise false.
+   * @private
+   */
   _isNotificationPermissionGranted(permission) {
     return permission === _GRANTED;
   }
