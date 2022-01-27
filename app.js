@@ -49,7 +49,6 @@ function disconnectClient(socket) {
 
 function receiveChatMessage(socket, message) {
   try {
-    
     const sender = users.getById(socket.id)?.username;
 
     if (sender === undefined) {
