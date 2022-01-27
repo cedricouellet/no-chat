@@ -10,6 +10,7 @@ const EV_USERS = "users";
 
 // DOM event IDs
 const EV_SUBMIT = "submit";
+const EV_MOUSEOVER = "mouseover";
 
 // DOM elements
 const faviconHolder = document.getElementById("favicon");
@@ -28,12 +29,15 @@ const notificationDisplayer = new NotificationDisplayer(faviconHolder, NOTIFICAT
 // Client socket
 const socket = io();
 
-// Event listeners
+// Socket event listeners
 socket.emit(EV_JOIN, username);
 socket.on(EV_JOIN, onJoin);
 socket.on(EV_MESSAGE, onMessageReceived);
 socket.on(EV_USERS, onUsersReceived);
+
+// DOM event listeners
 chatForm.addEventListener(EV_SUBMIT, onSubmitClicked);
+window.addEventListener(EV_MOUSEOVER, () => notificationDisplayer.clearNotifications());
 
 /**
  * When the user joins
@@ -136,9 +140,6 @@ function getFormattedTime() {
   if (hours === 0) hours = 12;
 
   let minutes = now.getMinutes().toString().padStart(2, "0");
-  if (minutes < 10) {
-    minutes = "0" + minutes.toString();
-  }
 
   return `${hours}:${minutes} ${suffix}`;
 }
