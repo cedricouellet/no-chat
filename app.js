@@ -4,10 +4,10 @@ const http = require("http");
 const socketIO = require("socket.io");
 const express = require("express");
 
-const { events } = require("./helpers/constants");
-const sanitizer = require("./helpers/sanitizer");
-const messaging = require("./helpers/messaging");
-const users = require("./helpers/users");
+const { events } = require("./lib/constants");
+const messaging = require("./lib/messaging");
+const users = require("./lib/users");
+const isZalgo = require("./helpers/isZalgo");
 
 const PORT = parseInt(process.env.PORT) || 3000;
 
@@ -59,9 +59,9 @@ function receiveChatMessage(socket, message) {
       return;
     }
 
-    if (messaging.getZalgoScore(message)) {
+    if (isZalgo(message)) {
       socket.emit(events.MESSAGE,
-        messaging.generateServerMessage("Zalgo is not supported...\n\nFuck off!")
+        messaging.generateServerMessage("Nice try, but Zalgo is not allowed...")
       );
 
       return;
@@ -69,7 +69,7 @@ function receiveChatMessage(socket, message) {
 
     const messageObject = {
       sender: sender,
-      text: sanitizer.sanitize(message || "hi"),
+      text: message.trim(),
     };
 
     io.emit(events.MESSAGE, messageObject);
@@ -88,6 +88,10 @@ function receiveChatMessage(socket, message) {
 
 function joinUser(socket, username) {
   try {
+    if (isZalgo(username.trim())) {
+      username = "I think I'm funny because I use Zalgo";
+    }
+
     const joined = users.add(socket.id, username);
 
     socket.emit(events.JOIN, joined.username);

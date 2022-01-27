@@ -14,6 +14,8 @@ const EV_USERS = "users";
 const EV_SUBMIT = "submit";
 const EV_MOUSEOVER = "mouseover";
 const EV_CHANGE = "change";
+const EV_FOCUS = "focus";
+const EV_BLUR = "blur";
 
 // DOM elements
 const faviconHolder = document.getElementById("favicon");
@@ -27,6 +29,9 @@ const notifyCheckbox = document.getElementById("notification-checkbox");
 let username = sessionStorage.getItem(KEY_USERNAME) || "Guest";
 let notificationsEnabled = localStorage.getItem(KEY_NOTIFICATIONS) === 'true' || false;
 notifyCheckbox.checked = notificationsEnabled;
+
+// Utility variables
+let isFocused = true;
 
 // Notification senders
 const notifier = new BrowserNotifier(window);
@@ -43,7 +48,16 @@ socket.on(EV_USERS, onUsersReceived);
 
 // DOM event listeners
 chatForm.addEventListener(EV_SUBMIT, onSubmitClicked);
-window.addEventListener(EV_MOUSEOVER, () => notificationDisplayer.clearNotifications());
+
+window.addEventListener(EV_FOCUS, () => {
+  isFocused = true;
+  notificationDisplayer.clearNotifications();
+});
+
+window.addEventListener(EV_BLUR, () => {
+  isFocused = false;
+});
+
 notifyCheckbox.addEventListener(EV_CHANGE, (e) => {
   notificationsEnabled = e.target.checked;
   localStorage.setItem(KEY_NOTIFICATIONS, notificationsEnabled);
@@ -66,7 +80,7 @@ function onMessageReceived(messageObject) {
   if (messageObject?.sender !== username) {
     notificationDisplayer.addNotification();
 
-    if (notificationsEnabled === true) {
+    if (notificationsEnabled === true && isFocused === false) {
       notifier.notify(`${messageObject?.sender}: ${messageObject?.text}`);
     }
   }
