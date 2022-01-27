@@ -8,7 +8,6 @@ const { events } = require("./helpers/constants");
 const sanitizer = require("./helpers/sanitizer");
 const messaging = require("./helpers/messaging");
 const users = require("./helpers/users");
-const constants = require("constants");
 
 const PORT = parseInt(process.env.PORT) || 3000;
 
