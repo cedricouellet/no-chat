@@ -59,6 +59,14 @@ function receiveChatMessage(socket, message) {
       return;
     }
 
+    if (messaging.getZalgoScore(message)) {
+      socket.emit(events.MESSAGE,
+        messaging.generateServerMessage("Zalgo is not supported...\n\nFuck off!")
+      );
+
+      return;
+    }
+
     const messageObject = {
       sender: sender,
       text: sanitizer.sanitize(message || "hi"),
