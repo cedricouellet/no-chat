@@ -21,14 +21,14 @@ function getZalgoScore(str) {
   if (str.length == 0) return false;
 
   const reg = new RegExp(/([aeiouy]\u0308)|[\u0300-\u036f\u0489]/, "gi");
-  const trueLength = str.normalize("NFD").replace(/[\u0300-\u036f]/, "g").length;
+  const charBites = str.match(/[\s\S]{1,3}/g).length;
   let rawScore = 0;
 
   str.split("").forEach(char => {
     if (reg.test(char)) rawScore++;
   });
-  
-  return rawScore / trueLength > 0.8;
+
+  return rawScore / charBites >= 1;
 }
 
 module.exports = {
