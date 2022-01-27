@@ -54,7 +54,6 @@ function receiveChatMessage(socket, message) {
     const messageObject = {
       sender: users.getById(socket.id).username,
       text: sanitizer.sanitize(message || "hi"),
-      time: messaging.generateFormattedDate(),
     };
 
     io.emit(events.MESSAGE, messageObject);
