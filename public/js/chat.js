@@ -1,6 +1,8 @@
 // Constants
 const MAX_MESSAGE_LENGTH = 500;
 const NOTIFICATION_FAVICON = './icon/notification.ico';
+const KEY_NOTIFICATIONS = "notifications";
+const KEY_USERNAME = "username";
 
 // socket.io server event IDs
 const EV_MESSAGE = "message";
@@ -11,6 +13,7 @@ const EV_USERS = "users";
 // DOM event IDs
 const EV_SUBMIT = "submit";
 const EV_MOUSEOVER = "mouseover";
+const EV_CHANGE = "change";
 
 // DOM elements
 const faviconHolder = document.getElementById("favicon");
@@ -18,9 +21,12 @@ const messagesContainer = document.getElementById("messages");
 const messageInput = document.getElementById("message-input");
 const chatForm = document.getElementById("form");
 const usersContainer = document.getElementById("users");
+const notifyCheckbox = document.getElementById("notification-checkbox");
 
 // Session storage variables
-let username = sessionStorage.getItem("username") || "Guest";
+let username = sessionStorage.getItem(KEY_USERNAME) || "Guest";
+let notificationsEnabled = localStorage.getItem(KEY_NOTIFICATIONS) === 'true' || false;
+notifyCheckbox.checked = notificationsEnabled;
 
 // Notification senders
 const notifier = new BrowserNotifier(window);
@@ -38,6 +44,10 @@ socket.on(EV_USERS, onUsersReceived);
 // DOM event listeners
 chatForm.addEventListener(EV_SUBMIT, onSubmitClicked);
 window.addEventListener(EV_MOUSEOVER, () => notificationDisplayer.clearNotifications());
+notifyCheckbox.addEventListener(EV_CHANGE, (e) => {
+  notificationsEnabled = e.target.checked;
+  localStorage.setItem(KEY_NOTIFICATIONS, notificationsEnabled);
+});
 
 /**
  * When the user joins
@@ -45,7 +55,7 @@ window.addEventListener(EV_MOUSEOVER, () => notificationDisplayer.clearNotificat
  */
 function onJoin(givenUsername) {
   username = givenUsername;
-  sessionStorage.setItem("username", username);
+  sessionStorage.setItem(KEY_USERNAME, username);
 }
 
 /**
@@ -55,6 +65,10 @@ function onJoin(givenUsername) {
 function onMessageReceived(messageObject) {
   if (messageObject?.sender !== username) {
     notificationDisplayer.addNotification();
+
+    if (notificationsEnabled === true) {
+      notifier.notify(messageObject?.text);
+    }
   }
 
   displayMessage(messageObject);
