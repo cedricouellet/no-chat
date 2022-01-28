@@ -57,7 +57,7 @@
   background: var(--primary-color);
   color: #fff;
   padding: 20px 20px 60px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 #sidebar h2 {
@@ -73,6 +73,10 @@
 
 #sidebar ul li {
   padding: 10px 0;
+}
+
+.sidebarItems {
+  margin-left: 2em;
 }
 
 #messages {
