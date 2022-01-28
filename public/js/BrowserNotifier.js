@@ -1,11 +1,21 @@
+/**
+ * The value of a granted permission.
+ * @private
+ */
 const _GRANTED = "granted";
 
+/**
+ * Sends notification to the operating system from the browser, if supported and allowed.
+ *
+ * Operations:
+ * - notify (send a browser notification)
+ */
 class BrowserNotifier {
   /**
    * Constructor
-   * @param {Window?} win
+   * @param {Window} win The window with which to send notifications
    */
-  constructor(win = undefined) {
+  constructor(win) {
     this._win = win;
     this._notification = undefined;
   }
@@ -21,19 +31,29 @@ class BrowserNotifier {
    * @param {string} message The message with which to notify the user.
    */
   notify(message) {
+    // If notifications are not supported, stop here
     if (this._win === undefined) return;
     if (!this._isNotificationSupported()) return;
 
     this._notification = this._win?.Notification
-    if (!this._isNotificationPermissionGranted(this._notification.permission)) {
-      this._notification.requestPermission().then((permission) => {
-        if (!this._isNotificationPermissionGranted(permission)) return;
-        this._sendNotification(message);
-      });
+
+    // If permissions are granted
+    if (this._isNotificationPermissionGranted(this._notification.permission)) {
+      // Send the notification
+      this._sendNotification(message);
+
+      // Stop here
       return;
     }
 
-    this._sendNotification(message);
+    // Otherwise, ask for them
+    this._notification.requestPermission().then((permission) => {
+      // If still denied, stop here
+      if (!this._isNotificationPermissionGranted(permission)) return;
+
+      // Otherwise send the notification
+      this._sendNotification(message);
+    });
   }
 
   /**
@@ -42,6 +62,7 @@ class BrowserNotifier {
    * @private
    */
   _sendNotification(message) {
+    // Create the notification, which will close shortly after being shown
     new Notification(message).close();
   }
 

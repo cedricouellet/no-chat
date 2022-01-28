@@ -1,4 +1,19 @@
+/**
+ * Displays notification updates in the browser window by:
+ * - changing the title to the unseen notification count
+ * - changing the icon to represent that there are unseen notifications
+ *
+ * Operations:
+ * - Add a notification
+ * - Clear notifications
+ */
 class NotificationDisplayer {
+
+  /**
+   * Constructor
+   * @param {HTMLLinkElement} faviconElement The favicon holder containing the default app favicon.
+   * @param {string} newFaviconHref The path to the icon representing unread browser notifications.
+   */
   constructor(faviconElement, newFaviconHref) {
     this._isSetup = true;
     this._count = 0;
@@ -11,8 +26,6 @@ class NotificationDisplayer {
 
   /**
    * Add a notification, updating the app favicon and adds to the title.
-   *
-   * Note: `setup` method must be called beforehand.
    */
   addNotification() {
     if (this._isSetup === false) return;
@@ -25,7 +38,6 @@ class NotificationDisplayer {
 
   /**
    * Clear the notifications, update the title and change the icon to the default one.
-   * Note: `setup` method must be called beforehand.
    */
   clearNotifications() {
     this._count = 0;
