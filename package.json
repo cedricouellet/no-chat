@@ -1,6 +1,6 @@
 {
   "name": "no-chat",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "A simple Node.js chat application using Socket.io and Express",
   "main": "app.js",
   "scripts": {
