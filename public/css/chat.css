@@ -136,13 +136,25 @@
 }
 
 #char-count {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+
   background-color: var(--accent-color);
   color: var(--light-color);
-
+  font-family: "Inconsolata", monospace;
   border:  0;
   padding: 0.5em;
   font-size: 1em;
-  font-family: 'monospace';
+}
+
+#char-count:hover {
+  cursor: default;
+}
+
+.over {
+  color: var(--error-color) !important;
 }
 
 @media (max-width: 700px) {

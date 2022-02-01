@@ -1,4 +1,7 @@
+/** The maximum length of a message */
 const MAX_MESSAGE_LENGTH = 500;
+
+/** The maximum length of a username */
 const MAX_USERNAME_LENGTH = 15;
 
 /** The favicon to set when a user received message while out of focus */
@@ -18,9 +21,6 @@ const EV_JOIN = "join";
 
 /** To ask the server for the list of usernames, then receiving it. */
 const EV_USERS = "users";
-
-/** Format to display the char count with */
-const CHAR_TEMPLATE = "/500";
 
 // DOM event IDs
 const EV_SUBMIT = "submit";
@@ -53,6 +53,9 @@ const notificationDisplayer = new NotificationDisplayer(faviconHolder, NOTIFICAT
 // Client socket
 const socket = io();
 
+// Initialize char counter
+updateMessageLength();
+
 // Socket event listeners
 socket.emit(EV_JOIN, cleanUsername());
 socket.on(EV_JOIN, onJoin);
@@ -81,9 +84,10 @@ notifyCheckbox.addEventListener(EV_CHANGE, (e) => {
   localStorage.setItem(KEY_NOTIFICATIONS, notificationsEnabled);
 });
 
-// When the input changes updates char count
-messageInput.addEventListener(EV_INPUT, () => {
-  messageCharCount.innerText = messageInput.value.length.toString() + CHAR_TEMPLATE;
+// When the input changes, update char count
+messageInput.addEventListener(EV_INPUT, (e) => {
+  preventMessageOverflow(e);
+  updateMessageLength();
 });
 
 
@@ -138,7 +142,39 @@ function onSubmitClicked(e) {
   messageInput.value = "";
 
   // Clear the char counter
-  messageCharCount.innerText = "0" + CHAR_TEMPLATE;
+  updateMessageLength();
+}
+
+/**
+ * Update the message length on the DOM.
+ */
+function updateMessageLength() {
+  const maxDigits = MAX_MESSAGE_LENGTH.toString().length;
+  const strCount = messageInput.value.length.toString().padStart(maxDigits, '0');
+
+  messageCharCount.innerText = `${strCount}/${MAX_MESSAGE_LENGTH}`;
+
+  if (messageInput.value.length >= MAX_MESSAGE_LENGTH && !messageCharCount.classList.contains("over")) {
+    messageCharCount.classList.add("over");
+    return;
+  }
+  if (messageInput.value.length < MAX_MESSAGE_LENGTH && messageCharCount.classList.contains("over")) {
+    messageCharCount.classList.remove("over");
+  }
+}
+
+/**
+ * Prevent message input going past the limit.
+ * @param {Event} e The input event.
+ */
+function preventMessageOverflow(e) {
+  e.preventDefault();
+
+  const message = messageInput.value;
+
+  if (message.length >= MAX_MESSAGE_LENGTH) {
+    messageInput.value = messageInput.value.substring(0, MAX_MESSAGE_LENGTH);
+  }
 }
 
 /**
