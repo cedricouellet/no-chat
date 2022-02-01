@@ -1,4 +1,5 @@
 const MAX_MESSAGE_LENGTH = 500;
+const MAX_USERNAME_LENGTH = 15;
 
 /** The favicon to set when a user received message while out of focus */
 const NOTIFICATION_FAVICON = './icon/notification.ico';
@@ -48,7 +49,7 @@ const notificationDisplayer = new NotificationDisplayer(faviconHolder, NOTIFICAT
 const socket = io();
 
 // Socket event listeners
-socket.emit(EV_JOIN, username);
+socket.emit(EV_JOIN, cleanUsername());
 socket.on(EV_JOIN, onJoin);
 socket.on(EV_MESSAGE, onMessageReceived);
 socket.on(EV_USERS, onUsersReceived);
@@ -118,7 +119,7 @@ function onSubmitClicked(e) {
 
   // If the message is too long, we shorten it
   if (message.length > MAX_MESSAGE_LENGTH) {
-    message = message.substring(0, MAX_MESSAGE_LENGTH) + "...";
+    message = cutText(message, MAX_MESSAGE_LENGTH);
   }
 
   // We send the message to the server socket
@@ -182,6 +183,27 @@ function onUsersReceived(usernamesList) {
     user.innerText = username;
     usersContainer.appendChild(user);
   });
+}
+
+/**
+ * Cut text if it is above a limit.
+ * @param {string} text The text to cut.
+ * @param {number} limit The maximum length of the text until it is cleaned.
+ * @return {string} The cleaned text.
+ */
+function cutText(text, limit) {
+  return text.trim().substring(0, limit) + "...";
+}
+
+/**
+ * Clean the username
+ * @return {string} The cleaned username
+ */
+function cleanUsername() {
+  if (username.length > MAX_USERNAME_LENGTH) {
+    username = cutText(username, MAX_USERNAME_LENGTH);
+  }
+  return username;
 }
 
 /**
