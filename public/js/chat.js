@@ -1,4 +1,8 @@
+/** The maximum length of a message */
 const MAX_MESSAGE_LENGTH = 500;
+
+/** The maximum length of a username */
+const MAX_USERNAME_LENGTH = 15;
 
 /** The favicon to set when a user received message while out of focus */
 const NOTIFICATION_FAVICON = './icon/notification.ico';
@@ -21,16 +25,22 @@ const EV_USERS = "users";
 // DOM event IDs
 const EV_SUBMIT = "submit";
 const EV_CHANGE = "change";
+const EV_INPUT = "input";
 const EV_FOCUS = "focus";
 const EV_BLUR = "blur";
+const EV_CLICK = "click";
 
 // DOM elements
 const faviconHolder = document.getElementById("favicon");
 const messagesContainer = document.getElementById("messages");
 const messageInput = document.getElementById("message-input");
+const messageCharCount = document.getElementById("char-count");
 const chatForm = document.getElementById("form");
-const usersContainer = document.getElementById("users");
 const notifyCheckbox = document.getElementById("notification-checkbox");
+const usersContainer = document.getElementById("users-container");
+const usersToggler = document.getElementById("users-toggler");
+const settingsContainer = document.getElementById("settings-container");
+const settingsToggler = document.getElementById("settings-toggler");
 
 // Session storage variables
 let username = sessionStorage.getItem(KEY_USERNAME) || "Guest";
@@ -47,8 +57,11 @@ const notificationDisplayer = new NotificationDisplayer(faviconHolder, NOTIFICAT
 // Client socket
 const socket = io();
 
+// Initialize char counter
+updateMessageLength();
+
 // Socket event listeners
-socket.emit(EV_JOIN, username);
+socket.emit(EV_JOIN, cleanUsername());
 socket.on(EV_JOIN, onJoin);
 socket.on(EV_MESSAGE, onMessageReceived);
 socket.on(EV_USERS, onUsersReceived);
@@ -75,6 +88,26 @@ notifyCheckbox.addEventListener(EV_CHANGE, (e) => {
   localStorage.setItem(KEY_NOTIFICATIONS, notificationsEnabled);
 });
 
+// When the input changes, update char count
+messageInput.addEventListener(EV_INPUT, (e) => {
+  preventMessageOverflow(e);
+  updateMessageLength();
+});
+
+// Toggle settings visibility when clicked
+settingsToggler.addEventListener(EV_CLICK, (e) => {
+  e.preventDefault();
+  toggleElement(settingsContainer);
+});
+
+// Toggle users visibility when clicked
+usersToggler.addEventListener(EV_CLICK, (e) => {
+  e.preventDefault();
+  toggleElement(usersContainer);
+});
+
+
+
 /**
  * When the user joins
  * @param {string} givenUsername The username received from the server socket.
@@ -87,7 +120,7 @@ function onJoin(givenUsername) {
 
 /**
  * When a message is received from the server socket
- * @param {{sender: string, text: string}} messageObject The message object to display.
+ * @param {{sender: string, text: string, errorLevel: number}} messageObject The message object to display.
  */
 function onMessageReceived(messageObject) {
   // Do not show/send notifications if the message received was the one composed by the current user
@@ -118,17 +151,64 @@ function onSubmitClicked(e) {
 
   // If the message is too long, we shorten it
   if (message.length > MAX_MESSAGE_LENGTH) {
-    message = message.substring(0, MAX_MESSAGE_LENGTH) + "...";
+    message = cutText(message, MAX_MESSAGE_LENGTH);
   }
 
   // We send the message to the server socket
   socket.emit(EV_MESSAGE, message);
   messageInput.value = "";
+
+  // Clear the char counter
+  updateMessageLength();
+}
+
+/**
+ * Toggle an element's visibility
+ * @param {Element} element The DOM element.
+ */
+function toggleElement(element) {
+  if (element.classList.contains("hidden")) {
+    element.classList.remove("hidden");
+  } else {
+    element.classList.add("hidden");
+  }
+}
+
+/**
+ * Update the message length on the DOM.
+ */
+function updateMessageLength() {
+  const maxDigits = MAX_MESSAGE_LENGTH.toString().length;
+  const strCount = messageInput.value.length.toString().padStart(maxDigits, '0');
+
+  messageCharCount.innerText = `${strCount}/${MAX_MESSAGE_LENGTH}`;
+
+  if (messageInput.value.length >= MAX_MESSAGE_LENGTH && !messageCharCount.classList.contains("over")) {
+    messageCharCount.classList.add("over");
+    return;
+  }
+  if (messageInput.value.length < MAX_MESSAGE_LENGTH && messageCharCount.classList.contains("over")) {
+    messageCharCount.classList.remove("over");
+  }
+}
+
+/**
+ * Prevent message input going past the limit.
+ * @param {Event} e The input event.
+ */
+function preventMessageOverflow(e) {
+  e.preventDefault();
+
+  const message = messageInput.value;
+
+  if (message.length >= MAX_MESSAGE_LENGTH) {
+    messageInput.value = messageInput.value.substring(0, MAX_MESSAGE_LENGTH);
+  }
 }
 
 /**
  * Display an incoming message.
- * @param {{sender: string, text: string}} messageObject The message object to display.
+ * @param {{sender: string, text: string, errorLevel: number}} messageObject The message object to display.
  */
 function displayMessage(messageObject) {
   // Create the container
@@ -139,8 +219,10 @@ function displayMessage(messageObject) {
   // Ex: different colors for each
   if (messageObject.sender === username) {
     container.classList.add("outgoing-message");
-  } else {
+  } else if (messageObject.errorLevel === 0) {
     container.classList.add("incoming-message");
+  } else {
+    container.classList.add("error-message");
   }
 
   // Assign the sender to a DOM element
@@ -182,6 +264,27 @@ function onUsersReceived(usernamesList) {
     user.innerText = username;
     usersContainer.appendChild(user);
   });
+}
+
+/**
+ * Cut text if it is above a limit.
+ * @param {string} text The text to cut.
+ * @param {number} limit The maximum length of the text until it is cleaned.
+ * @return {string} The cleaned text.
+ */
+function cutText(text, limit) {
+  return text.trim().substring(0, limit) + "...";
+}
+
+/**
+ * Clean the username
+ * @return {string} The cleaned username
+ */
+function cleanUsername() {
+  if (username.length > MAX_USERNAME_LENGTH) {
+    username = cutText(username, MAX_USERNAME_LENGTH);
+  }
+  return username;
 }
 
 /**
