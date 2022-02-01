@@ -135,6 +135,16 @@
   color: var(--light-color);
 }
 
+#char-count {
+  background-color: var(--accent-color);
+  color: var(--light-color);
+
+  border:  0;
+  padding: 0.5em;
+  font-size: 1em;
+  font-family: 'monospace';
+}
+
 @media (max-width: 700px) {
   #main {
     display: block;

@@ -19,9 +19,13 @@ const EV_JOIN = "join";
 /** To ask the server for the list of usernames, then receiving it. */
 const EV_USERS = "users";
 
+/** Format to display the char count with */
+const CHAR_TEMPLATE = "/500";
+
 // DOM event IDs
 const EV_SUBMIT = "submit";
 const EV_CHANGE = "change";
+const EV_INPUT = "input";
 const EV_FOCUS = "focus";
 const EV_BLUR = "blur";
 
@@ -29,6 +33,7 @@ const EV_BLUR = "blur";
 const faviconHolder = document.getElementById("favicon");
 const messagesContainer = document.getElementById("messages");
 const messageInput = document.getElementById("message-input");
+const messageCharCount = document.getElementById("char-count");
 const chatForm = document.getElementById("form");
 const usersContainer = document.getElementById("users");
 const notifyCheckbox = document.getElementById("notification-checkbox");
@@ -75,6 +80,12 @@ notifyCheckbox.addEventListener(EV_CHANGE, (e) => {
   notificationsEnabled = e.target.checked;
   localStorage.setItem(KEY_NOTIFICATIONS, notificationsEnabled);
 });
+
+// When the input changes updates char count
+messageInput.addEventListener(EV_INPUT, () => {
+  messageCharCount.innerText = messageInput.value.length.toString() + CHAR_TEMPLATE;
+});
+
 
 /**
  * When the user joins
@@ -125,6 +136,9 @@ function onSubmitClicked(e) {
   // We send the message to the server socket
   socket.emit(EV_MESSAGE, message);
   messageInput.value = "";
+
+  // Clear the char counter
+  messageCharCount.innerText = "0" + CHAR_TEMPLATE;
 }
 
 /**
