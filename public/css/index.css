@@ -37,6 +37,10 @@
   width: 100%;
 }
 
+#main input[type="text"]:focus {
+  outline: 0;
+}
+
 #main .btn {
   margin-top: 20px;
   width: 100%;

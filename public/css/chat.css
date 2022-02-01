@@ -10,6 +10,10 @@
   flex: 1;
 }
 
+#message-input:focus {
+  outline: 0;
+}
+
 #container {
   border-radius: 15px;
   max-width: 50%;
