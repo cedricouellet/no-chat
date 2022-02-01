@@ -103,6 +103,11 @@
 .incoming-message {
   background-color: var(--accent-color);
 }
+
+.error-message {
+  background-color: var(--error-color);
+}
+
 .message {
   word-wrap: break-word;
 }

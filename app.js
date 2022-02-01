@@ -111,7 +111,7 @@ function receiveMessage(socket, message) {
     if (sender === undefined) {
       // Let them know something went wrong
       socket.emit(events.MESSAGE,
-        messaging.generateServerMessage("Your connection was lost...\n\nTry refreshing the page!")
+        messaging.generateErrorMessage("Your connection was lost...\n\nTry refreshing the page!")
       );
 
       return;
@@ -121,7 +121,7 @@ function receiveMessage(socket, message) {
     if (isZalgo(message)) {
       // Let them know they can't do that
       socket.emit(events.MESSAGE,
-        messaging.generateServerMessage("Nice try, but Zalgo is not allowed...")
+        messaging.generateErrorMessage("Nice try, but Zalgo is not allowed...")
       );
 
       return;
@@ -139,7 +139,7 @@ function receiveMessage(socket, message) {
     // If something goes wrong with the message, let the sender know
     socket.emit(
       events.MESSAGE,
-      messaging.generateServerMessage(
+      messaging.generateErrorMessage(
         "Sending failed. Your message was too long or contained invalid characters."
       )
     );

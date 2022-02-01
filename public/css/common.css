@@ -3,11 +3,11 @@
 :root {
   --primary-color: #2d3142;
   --secondary-color: #4f5d75;
-  --accent-color: #d81e5b;
-  --accent-hover-color: #d81e5ce7;
-  --light-color: whitesmoke;
+  --accent-color: #F43E4D;
+  --accent-hover-color: #F5515F;
+  --light-color: #F6F0ED;
   --success-color: #5cb85c;
-  --error-color: #d9534f;
+  --error-color: #93032E;
 }
 
 * {

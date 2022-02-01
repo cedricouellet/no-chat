@@ -103,7 +103,7 @@ function onJoin(givenUsername) {
 
 /**
  * When a message is received from the server socket
- * @param {{sender: string, text: string}} messageObject The message object to display.
+ * @param {{sender: string, text: string, errorLevel: number}} messageObject The message object to display.
  */
 function onMessageReceived(messageObject) {
   // Do not show/send notifications if the message received was the one composed by the current user
@@ -179,7 +179,7 @@ function preventMessageOverflow(e) {
 
 /**
  * Display an incoming message.
- * @param {{sender: string, text: string}} messageObject The message object to display.
+ * @param {{sender: string, text: string, errorLevel: number}} messageObject The message object to display.
  */
 function displayMessage(messageObject) {
   // Create the container
@@ -190,8 +190,10 @@ function displayMessage(messageObject) {
   // Ex: different colors for each
   if (messageObject.sender === username) {
     container.classList.add("outgoing-message");
-  } else {
+  } else if (messageObject.errorLevel === 0) {
     container.classList.add("incoming-message");
+  } else {
+    container.classList.add("error-message");
   }
 
   // Assign the sender to a DOM element
