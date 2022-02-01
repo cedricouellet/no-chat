@@ -16,9 +16,9 @@ pickerList.forEach(picker => {
  * @param {Event} e event that triggered the color change
  */
 function applyColor(e) {
-    console.log(e.target.value);
-
-    root.style.setProperty(`--${e.target.id}`, e.target.value)
+    root.style.setProperty(`--${e.target.id}`, e.target.value);
 }
 
+// Explanation:
 //<input type="color" value="#ff0000" class="picker" id="primary-color">
+

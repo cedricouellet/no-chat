@@ -31,8 +31,8 @@
             <h3 id="settings-toggler"><i class="fas fa-cog"></i>&nbsp;Settings</h3>
             <ul id="settings-container" class="sidebar-item">
                 <li>
-                    <label for="notification-checkbox">Alerts</label>
                     <input id="notification-checkbox" type="checkbox"/>
+                    <label for="notification-checkbox">Alerts</label>
                 </li>
                 <li>
                   <input type="color" value="#2d3142" class="picker" id="primary-color">
@@ -40,15 +40,15 @@
                 </li>
                 <li>
                   <input type="color" value="#4f5d75" class="picker" id="secondary-color">
-                  <label for="primary-color">Secondary</label>
+                  <label for="secondary-color">Secondary</label>
                 </li>
                 <li>
                   <input type="color" value="#F43E4D" class="picker" id="accent-color">
-                  <label for="primary-color">Accent</label>
+                  <label for="accent-color">Accent</label>
                 </li>
                 <li>
                   <input type="color" value="#F5515F" class="picker" id="accent-hover-color">
-                  <label for="primary-color">Hover</label>
+                  <label for="accent-hover-color">Hover</label>
                   <br>
                   <br>
                 </li>
@@ -60,6 +60,8 @@
     </div>
     <div id="form-container">
         <form id="form">
+            <!-- Satisfy linter -->
+            <label for="message-input"></label>
             <input
                     id="message-input"
                     type="text"
