@@ -33,18 +33,18 @@
   justify-content: space-between;
 }
 
-.scrollbars::-webkit-scrollbar-track {
+.scrollbar::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
           box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 	background-color: var(--light-color);
 }
 
-.scrollbars::-webkit-scrollbar {
+.scrollbar::-webkit-scrollbar {
   width: 1rem;
 	background-color: var(--light-color);
 }
 
-.scrollbars::-webkit-scrollbar-thumb {
+.scrollbar::-webkit-scrollbar-thumb {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
           box-shadow: inset 0 0 6px rgba(0,0,0,.3);
   border-radius: 10px;
@@ -79,7 +79,7 @@
   padding: 10px 0;
 }
 
-.sidebarItems {
+.sidebar-item {
   margin-left: 2em;
 }
 
@@ -160,6 +160,23 @@
 
 #char-count:hover {
   cursor: default;
+}
+
+#settings-toggler:hover {
+  cursor: pointer;
+}
+
+#users-toggler:hover {
+  cursor: pointer;
+}
+
+#notification-checkbox {
+  padding: 2em;
+  transform: scale(1.25);
+}
+
+.hidden {
+  display: none;
 }
 
 .over {

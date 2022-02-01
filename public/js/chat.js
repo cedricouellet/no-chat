@@ -28,6 +28,7 @@ const EV_CHANGE = "change";
 const EV_INPUT = "input";
 const EV_FOCUS = "focus";
 const EV_BLUR = "blur";
+const EV_CLICK = "click";
 
 // DOM elements
 const faviconHolder = document.getElementById("favicon");
@@ -35,8 +36,11 @@ const messagesContainer = document.getElementById("messages");
 const messageInput = document.getElementById("message-input");
 const messageCharCount = document.getElementById("char-count");
 const chatForm = document.getElementById("form");
-const usersContainer = document.getElementById("users");
 const notifyCheckbox = document.getElementById("notification-checkbox");
+const usersContainer = document.getElementById("users-container");
+const usersToggler = document.getElementById("users-toggler");
+const settingsContainer = document.getElementById("settings-container");
+const settingsToggler = document.getElementById("settings-toggler");
 
 // Session storage variables
 let username = sessionStorage.getItem(KEY_USERNAME) || "Guest";
@@ -89,6 +93,19 @@ messageInput.addEventListener(EV_INPUT, (e) => {
   preventMessageOverflow(e);
   updateMessageLength();
 });
+
+// Toggle settings visibility when clicked
+settingsToggler.addEventListener(EV_CLICK, (e) => {
+  e.preventDefault();
+  toggleElement(settingsContainer);
+});
+
+// Toggle users visibility when clicked
+usersToggler.addEventListener(EV_CLICK, (e) => {
+  e.preventDefault();
+  toggleElement(usersContainer);
+});
+
 
 
 /**
@@ -143,6 +160,18 @@ function onSubmitClicked(e) {
 
   // Clear the char counter
   updateMessageLength();
+}
+
+/**
+ * Toggle an element's visibility
+ * @param {Element} element The DOM element.
+ */
+function toggleElement(element) {
+  if (element.classList.contains("hidden")) {
+    element.classList.remove("hidden");
+  } else {
+    element.classList.add("hidden");
+  }
 }
 
 /**
