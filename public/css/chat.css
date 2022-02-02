@@ -149,6 +149,52 @@ input[type=color]::-webkit-color-swatch-wrapper {
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
     background-color: var(--light-color);
 }
+  
+.picker {
+  display: none;
+}
+
+.picker::after {
+  visibility: visible;
+  background-color: #fff;
+  height: 1em;
+  width: 1em;
+}
+
+.picker:hover {
+  cursor: pointer;
+}
+
+.picker-button {
+  background-color: var(--light-color);
+  display: inline-block;
+  border-radius: 25%;
+  width: 1em;
+  height: 1em;
+}
+
+.picker-color {
+  display: inline-block;
+  border-radius: 100%;
+  width: 0.8em;
+  height: 0.8em;
+}
+
+.primary {
+  background-color: var(--primary-color);
+}
+
+.secondary {
+  background-color: var(--secondary-color);
+}
+
+.accent {
+  background-color: var(--accent-color);
+}
+
+.hover {
+  background-color: var(--accent-hover-color);
+}
 
 .scrollbar::-webkit-scrollbar {
     width: 1rem;
