@@ -1,4 +1,3 @@
-
 const path = require("path");
 const helmet = require("helmet");
 const http = require("http");
@@ -131,6 +130,7 @@ function receiveMessage(socket, message) {
     const messageObject = {
       sender: sender,
       text: message.trim(),
+      errorLevel: 0,
     };
 
     // Send the message to all clients
