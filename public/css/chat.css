@@ -42,12 +42,17 @@ input[type=color]::-webkit-color-swatch-wrapper {
     background-color: var(--secondary-color);
 }
 
-#char-count, .message, .meta {
+.message, .meta {
     color: var(--light-color);
 }
 
-#char-count, .incoming-message {
+.incoming-message {
     background-color: var(--accent-color);
+}
+
+#char-count {
+    background-color: white;
+    color: darkgray;
 }
 
 #header {
@@ -149,7 +154,7 @@ input[type=color]::-webkit-color-swatch-wrapper {
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
     background-color: var(--light-color);
 }
-  
+
 .picker {
   display: none;
 }

@@ -20,8 +20,8 @@
 <body>
     <div id="container">
         <header id="header">
-            <h1>NoChat&nbsp;<i class="fas fa-comment-dots"></i></h1>
-            <a href="index.html" class="btn">Leave</a>
+            <h1>NoChat <i class="fas fa-comment-dots"></i></h1>
+            <a href="index.html" class="btn"><i class="fas fa-times"></i></a>
         </header>
         <div id="main">
             <div id="sidebar" class="scrollbar">
@@ -32,25 +32,25 @@
                         <label for="notification-checkbox">Alerts</label>
                     </li>
                     <li>
-                        <input type="color" value="#2d3142" class="picker" id="primary-color">
+                        <input type="color" class="picker" id="primary-color">
                         <label for="primary-color">
                             <span class="picker-button"><span class="picker-color primary"></span></span> Primary
                         </label>
                     </li>
                     <li>
-                        <input type="color" value="#4f5d75" class="picker" id="secondary-color">
+                        <input type="color" class="picker" id="secondary-color">
                         <label for="secondary-color">
                             <span class="picker-button"><span class="picker-color secondary"></span></span> Secondary
                         </label>
                     </li>
                     <li>
-                        <input type="color" value="#F43E4D" class="picker" id="accent-color">
+                        <input type="color" class="picker" id="accent-color">
                         <label for="accent-color"><span class="picker-button">
                                 <span class="picker-color accent"></span></span> Accent
                         </label>
                     </li>
                     <li>
-                        <input type="color" value="#F5515F" class="picker" id="accent-hover-color">
+                        <input type="color" class="picker" id="accent-hover-color">
                         <label for="accent-hover-color">
                             <span class="picker-button"><span class="picker-color hover"></span></span> Hover
                         </label>
@@ -76,9 +76,7 @@
                 <label for="message-input"></label>
                 <input id="message-input" type="text" placeholder="Enter your message..." autocomplete="off" required />
                 <div id="char-count"></div>
-                <button id="send-btn" class="btn">
-                    Send&nbsp;<i class="fas fa-share"></i>
-                </button>
+                <button id="send-btn" class="btn"><i class="fas fa-paper-plane"></i></button>
             </form>
         </div>
 

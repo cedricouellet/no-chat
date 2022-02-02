@@ -42,12 +42,11 @@
 }
 
 #main .btn {
-    margin-top: 20px;
-    width: 100%;
-}
-
-.btn {
-    max-width: 20%;
+    display: table;
+    width: 15%;
+    font-size: 2em;
+    text-align: center;
+    margin: auto;
 }
 
 @media (max-width: 700px) {
