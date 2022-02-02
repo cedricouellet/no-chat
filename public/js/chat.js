@@ -1,5 +1,5 @@
 /** The maximum length of a message */
-const MAX_MESSAGE_LENGTH = 500;
+const MAX_MESSAGE_LENGTH = 200;
 
 /** The maximum length of a username */
 const MAX_USERNAME_LENGTH = 15;
@@ -59,6 +59,10 @@ const socket = io();
 
 // Initialize char counter
 updateMessageLength();
+
+// Initialize colors
+initColors();
+initColorPickers();
 
 // Socket event listeners
 socket.emit(EV_JOIN, cleanUsername());
@@ -224,7 +228,7 @@ function displayMessage(messageObject) {
   } else {
     container.classList.add("error-message");
   }
-
+  //
   // Assign the sender to a DOM element
   const senderParagraph = document.createElement("p");
   senderParagraph.classList.add("meta");
