@@ -42,6 +42,14 @@ input[type=color]::-webkit-color-swatch-wrapper {
     background-color: var(--secondary-color);
 }
 
+.outgoing-message {
+    float: right;
+}
+
+.incoming-message, .error-message {
+    float: left;
+}
+
 .message, .meta {
     color: var(--light-color);
 }
@@ -230,6 +238,7 @@ input[type=color]::-webkit-color-swatch-wrapper {
 
 .message {
     word-wrap: break-word;
+    width: 95%;
 }
 
 .hidden {
