@@ -159,30 +159,27 @@ input[type=color]::-webkit-color-swatch-wrapper {
   display: none;
 }
 
-.picker::after {
-  visibility: visible;
-  background-color: #fff;
-  height: 1em;
-  width: 1em;
-}
-
 .picker:hover {
   cursor: pointer;
 }
 
 .picker-button {
-  background-color: var(--light-color);
-  display: inline-block;
-  border-radius: 25%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 100%;
   width: 1em;
   height: 1em;
+  
+  background-color: var(--light-color);
 }
 
 .picker-color {
   display: inline-block;
   border-radius: 100%;
-  width: 0.8em;
-  height: 0.8em;
+  width: 80%;
+  height: 80%;
 }
 
 .primary {
