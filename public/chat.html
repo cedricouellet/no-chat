@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link id="favicon" rel="shortcut icon" href="icon/favicon.ico" type="image/x-icon"/>
-    <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
-            integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
-            crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="css/common.css"/>
-    <link rel="stylesheet" href="css/chat.css"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link id="favicon" rel="shortcut icon" href="icon/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+        integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/chat.css" />
     <script src="/socket.io/socket.io.min.js" defer></script>
     <script src="js/BrowserNotifier.js" defer></script>
     <script src="js/NotificationDisplayer.js" defer></script>
@@ -21,74 +18,78 @@
 </head>
 
 <body>
-<div id="container">
-    <header id="header">
-        <h1>NoChat&nbsp;<i class="fas fa-comment-dots"></i></h1>
-        <a href="index.html" class="btn">Leave</a>
-    </header>
-    <div id="main">
-        <div id="sidebar" class="scrollbar">
-            <h3 id="settings-toggler"><i class="fas fa-cog"></i>&nbsp;Settings</h3>
-            <ul id="settings-container" class="sidebar-item">
-                <li>
-                    <input id="notification-checkbox" type="checkbox"/>
-                    <label for="notification-checkbox">Alerts</label>
-                </li>
-                <li>
-                  <input type="color" class="picker" id="primary-color">
-                  <label for="primary-color">Primary</label>
-                </li>
-                <li>
-                  <input type="color" class="picker" id="secondary-color">
-                  <label for="secondary-color">Secondary</label>
-                </li>
-                <li>
-                  <input type="color" class="picker" id="accent-color">
-                  <label for="accent-color">Accent</label>
-                </li>
-                <li>
-                  <input type="color" class="picker" id="accent-hover-color">
-                  <label for="accent-hover-color">Hover</label>
-                </li>
-                <li>
-                    <button id="reset-colors-btn" class="btn">
-                        <i class="fas fa-undo"></i> Reset
-                    </button>
-                    <br>
-                    <br>
-                </li>
-            </ul>
-            <h3 id="users-toggler"><i class="fas fa-user-friends"></i>&nbsp;Users</h3>
-            <ul id="users-container" class="sidebar-item"></ul>
+    <div id="container">
+        <header id="header">
+            <h1>NoChat <i class="fas fa-comment-dots"></i></h1>
+            <a href="index.html" class="btn"><i class="fas fa-times"></i></a>
+        </header>
+        <div id="main">
+            <div id="sidebar" class="scrollbar">
+                <h3 id="settings-toggler"><i class="fas fa-cog"></i>&nbsp;Settings</h3>
+                <ul id="settings-container" class="sidebar-item">
+                    <li>
+                        <input id="notification-checkbox" type="checkbox" />
+                        <label for="notification-checkbox">Alerts</label>
+                    </li>
+                    <li>
+                        <input type="color" class="picker" id="primary-color">
+                        <label for="primary-color">
+                            <span class="picker-button"><span class="picker-color primary"></span></span> Primary
+                        </label>
+                    </li>
+                    <li>
+                        <input type="color" class="picker" id="secondary-color">
+                        <label for="secondary-color">
+                            <span class="picker-button"><span class="picker-color secondary"></span></span> Secondary
+                        </label>
+                    </li>
+                    <li>
+                        <input type="color" class="picker" id="accent-color">
+                        <label for="accent-color"><span class="picker-button">
+                                <span class="picker-color accent"></span></span> Accent
+                        </label>
+                    </li>
+                    <li>
+                        <input type="color" class="picker" id="accent-hover-color">
+                        <label for="accent-hover-color">
+                            <span class="picker-button"><span class="picker-color hover"></span></span> Hover
+                        </label>
+                        <br>
+                        <br>
+                    </li>
+                    <li>
+                        <button class="btn" id="reset-colors-btn">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                        <br>
+                        <br>
+                    </li>
+                </ul>
+                <h3 id="users-toggler"><i class="fas fa-user-friends"></i>&nbsp;Users</h3>
+                <ul id="users-container" class="sidebar-item"></ul>
+            </div>
+            <div id="messages" class="scrollbar"></div>
         </div>
-        <div id="messages" class="scrollbar"></div>
-    </div>
-    <div id="form-container">
-        <form id="form">
-            <!-- Satisfy linter -->
-            <label for="message-input"></label>
-            <input
-                    id="message-input"
-                    type="text"
-                    placeholder="Enter your message..."
-                    autocomplete="off"
-                    required/>
-            <div id="char-count"></div>
-            <button id="send-btn" class="btn">
-                Send&nbsp;<i class="fas fa-share"></i>
-            </button>
-        </form>
-    </div>
+        <div id="form-container">
+            <form id="form">
+                <!-- Satisfy linter -->
+                <label for="message-input"></label>
+                <input id="message-input" type="text" placeholder="Enter your message..." autocomplete="off" required />
+                <div id="char-count"></div>
+                <button id="send-btn" class="btn"><i class="fas fa-paper-plane"></i></button>
+            </form>
+        </div>
 
-    <div class="bottom">
-        <a class="git" href="https://github.com/cedricouellet/no-chat">
-            <i class="fab fa-github"></i>
-            https://github.com/cedricouellet/no-chat
-        </a>
-        <div class="copyright">
-            Copyright &copy; 2022 NoChat Devs
+        <div class="bottom">
+            <a class="git" href="https://github.com/cedricouellet/no-chat">
+                <i class="fab fa-github"></i>
+                https://github.com/cedricouellet/no-chat
+            </a>
+            <div class="copyright">
+                Copyright &copy; 2022 NoChat Devs
+            </div>
         </div>
     </div>
-</div>
 </body>
+
 </html>

@@ -42,12 +42,25 @@ input[type=color]::-webkit-color-swatch-wrapper {
     background-color: var(--secondary-color);
 }
 
-#char-count, .message, .meta {
+.outgoing-message {
+    float: right;
+}
+
+.incoming-message, .error-message {
+    float: left;
+}
+
+.message, .meta {
     color: var(--light-color);
 }
 
-#char-count, .incoming-message {
+.incoming-message {
     background-color: var(--accent-color);
+}
+
+#char-count {
+    background-color: white;
+    color: darkgray;
 }
 
 #header {
@@ -150,6 +163,53 @@ input[type=color]::-webkit-color-swatch-wrapper {
     background-color: var(--light-color);
 }
 
+.picker {
+    display: none;
+}
+
+.picker:hover {
+    cursor: pointer;
+}
+
+.picker-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 100%;
+    width: 1em;
+    height: 1em;
+
+    background-color: var(--light-color);
+}
+
+.picker-color {
+    display: inline-block;
+    border-radius: 100%;
+    width: 0.8em;
+    height: 0.8em;
+}
+
+.picker-color:hover {
+    cursor: pointer;
+}
+
+.primary {
+    background-color: var(--primary-color);
+}
+
+.secondary {
+    background-color: var(--secondary-color);
+}
+
+.accent {
+    background-color: var(--accent-color);
+}
+
+.hover {
+    background-color: var(--accent-hover-color);
+}
+
 .scrollbar::-webkit-scrollbar {
     width: 1rem;
     background-color: var(--light-color);
@@ -178,6 +238,7 @@ input[type=color]::-webkit-color-swatch-wrapper {
 
 .message {
     word-wrap: break-word;
+    width: 95%;
 }
 
 .hidden {
