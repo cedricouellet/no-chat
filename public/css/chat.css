@@ -156,46 +156,50 @@ input[type=color]::-webkit-color-swatch-wrapper {
 }
 
 .picker {
-  display: none;
+    display: none;
 }
 
 .picker:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .picker-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-  border-radius: 100%;
-  width: 1em;
-  height: 1em;
-  
-  background-color: var(--light-color);
+    border-radius: 100%;
+    width: 1em;
+    height: 1em;
+
+    background-color: var(--light-color);
 }
 
 .picker-color {
-  display: inline-block;
-  border-radius: 100%;
-  width: 80%;
-  height: 80%;
+    display: inline-block;
+    border-radius: 100%;
+    width: 0.8em;
+    height: 0.8em;
+}
+
+.picker-color:hover {
+    cursor: pointer;
 }
 
 .primary {
-  background-color: var(--primary-color);
+    background-color: var(--primary-color);
 }
 
 .secondary {
-  background-color: var(--secondary-color);
+    background-color: var(--secondary-color);
 }
 
 .accent {
-  background-color: var(--accent-color);
+    background-color: var(--accent-color);
 }
 
 .hover {
-  background-color: var(--accent-hover-color);
+    background-color: var(--accent-hover-color);
 }
 
 .scrollbar::-webkit-scrollbar {
